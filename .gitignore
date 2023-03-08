@@ -3,3 +3,5 @@ data_raw/
 notebooks/.ipynb_checkpoints/
 
 *.egg-info
+
+.env
