@@ -8,3 +8,7 @@ matplotlib
 seaborn
 scikit-learn
 scipy
+
+# API
+fastapi
+uvicorn
