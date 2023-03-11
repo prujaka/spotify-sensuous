@@ -2,20 +2,51 @@ import pandas as pd
 import scipy as sp
 from sklearn.preprocessing import MinMaxScaler
 
-def recommend_songs (song, singer):
 
-    # Data loading and scaling
-    df = pd.read_csv('../data/lewagon-spotify-data.csv')
-    df = df.drop(['popularity'],axis=1)
-    df_numeric=df.drop(columns=['name','artists'])
-    columns=df_numeric.columns.values.tolist()
+def strip_artists(s):
+    return s.replace("['", "").replace("']", "").replace("', '", ", ")
+
+
+def predict_playlist(song='White Christmas',
+                     artist='Frank Sinatra',
+                     n_neighbors=10):
+    """Find `n_neighbors` closest neighbors of a given seed song in an audio
+    feature space of le wagon sporify dataset. Only single artist is supported.
+    If the song is not in the dataset, return the song's name. The function
+    must be called from the repo's root.
+
+    Parameters
+    ----------
+    song : str
+        Song's name.
+
+    artist : str
+        Artist's name.
+
+    n_neighbors : int
+        Number of neighbors to the seed song.
+
+    Returns
+    -------
+    neighbors : list of shape (n_neighbors,) of tuples of shape (2,) of str
+        List of tuples of the closest songs. First element of a tuple is
+        a song name, the second one is the artist(s).
+    """
+
+    df = pd.read_csv('data/lewagon-spotify-data.csv')
+    df = df.drop(['popularity'], axis=1)
+    df_numeric = df.drop(columns=['name', 'artists'])
+    columns = df_numeric.columns.values.tolist()
     df_scaler = MinMaxScaler()
     df[columns] = df_scaler.fit_transform(df[columns])
 
     # Seed song selection
-    artists_formatted = f"['{singer}']"
-    seed_song = df[(df['name'] == song)
-                   & (df['artists'] == artists_formatted)]
+    artists_formatted = f"['{artist}']"
+    seed_song = df[(df['name'] == song) & (df['artists'] == artists_formatted)]
+
+    if seed_song.shape[0] == 0:
+        print("No such a song in the dataset. Returning the user's entry.")
+        return f'{song} by {artist}'
 
     # Feature "preprocessing"
     seed_song_features = seed_song.select_dtypes(exclude='object')
@@ -23,16 +54,14 @@ def recommend_songs (song, singer):
 
     # List of closest neighbors to the seed song
     tree = sp.spatial.KDTree(X.to_numpy())
-    distances, indeces = tree.query([seed_song_features], k=10)
+    distances, indeces = tree.query([seed_song_features], k=n_neighbors)
     indeces = indeces.flatten()
-    reco=[]
-    for i in indeces:
-        reco.append(f"*{df['name'].loc[i]}* by {df['artists'].loc[i]}")
+    neighbors_df = df.loc[list(indeces)]
+    songs = neighbors_df['name'].tolist()
+    artists = [
+        strip_artists(artist) for artist in neighbors_df['artists'].tolist()
+    ]
+    return list(zip(songs, artists))
 
-    if reco==[]:
-        return 'This song is not in the database'
-
-    else:
-        return reco
-
-    #test
+if __name__ == "__main__":
+    print(predict_playlist())
