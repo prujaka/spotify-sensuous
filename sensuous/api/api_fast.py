@@ -19,6 +19,5 @@ def dummy(song):
 # first model for predicting the 10 nearest songs
 @api.get("/predict")
 def predict(song: str, 
-            artist: str,
-            n_neighbors=10):
-    return predict_playlist(song, artist, n_neighbors)
+            artist: str):
+    return predict_playlist(song, artist)
