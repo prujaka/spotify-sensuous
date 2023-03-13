@@ -1,3 +1,7 @@
+import pandas as pd
+
+from sensuous.ml_logic.model import predict_playlist
+
 from fastapi import FastAPI
 
 api = FastAPI()
@@ -7,7 +11,13 @@ api = FastAPI()
 def index():
     return {"status": "API connected"}
 
-# here we put our first model: for now it just returns the song
-@api.get("/predict")
-def predict(song):
+# dummy predict endpoint
+@api.get("/dummy")
+def dummy(song):
     return {'song recommendation': song}
+
+# first model for predicting the 10 nearest songs
+@api.get("/predict")
+def predict(song: str, 
+            artist: str):
+    return predict_playlist(song, artist)
