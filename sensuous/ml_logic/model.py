@@ -33,7 +33,7 @@ def predict_playlist(song='White Christmas',
         a song name, the second one is the artist(s).
     """
 
-    df = pd.read_csv('data/lewagon-spotify-data.csv')
+    df = pd.read_csv('https://wagon-public-datasets.s3.amazonaws.com/Machine%20Learning%20Datasets/ML_spotify_data.csv')
     df = df.drop(['popularity'], axis=1)
     df_numeric = df.drop(columns=['name', 'artists'])
     columns = df_numeric.columns.values.tolist()
