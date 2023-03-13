@@ -61,7 +61,7 @@ def predict_playlist(song='White Christmas',
     artists = [
         strip_artists(artist) for artist in neighbors_df['artists'].tolist()
     ]
-    return list(zip(songs, artists))
+    return {'playlist': list(zip(songs, artists))}
 
 if __name__ == "__main__":
     print(predict_playlist())
