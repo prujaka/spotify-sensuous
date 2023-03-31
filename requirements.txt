@@ -9,6 +9,7 @@ pytest
 pylint
 seaborn
 scikit-learn
+scikit-image
 scipy
 
 # API

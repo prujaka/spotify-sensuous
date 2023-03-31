@@ -4,6 +4,7 @@ import cv2
 import librosa
 from skimage.io import imsave
 from skimage.transform import resize
+from sensuous.parameters import *
 
 
 def convert_audios_to_spectrograms(mp3_dir, png_dir):
@@ -43,4 +44,7 @@ def mp3_to_spectrogram(mp3_file):
 
 
 if __name__ == "__main__":
-    pass
+    mp3_dir = LOCAL_MP3_DIR
+    png_dir = LOCAL_PNG_DIR
+    convert_audios_to_spectrograms(mp3_dir, png_dir)
+    print('mp3 files successfully converted to png spectrograms.')

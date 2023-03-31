@@ -63,5 +63,6 @@ def predict_playlist(song='White Christmas',
     ]
     return {'playlist': list(zip(songs, artists))}
 
+
 if __name__ == "__main__":
     print(predict_playlist())
