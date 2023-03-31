@@ -12,9 +12,9 @@ def strip_artists(s):
     return s.replace("['", "").replace("']", "").replace("', '", ", ")
 
 
-def predict_playlist(song='White Christmas',
-                     artist='Frank Sinatra',
-                     n_neighbors=10):
+def predict_playlist_lewagon(song='White Christmas',
+                             artist='Frank Sinatra',
+                             n_neighbors=10):
     """Find `n_neighbors` closest neighbors of a given seed song in an audio
     feature space of le wagon sporify dataset. Only single artist is supported.
     If the song is not in the dataset, return the song's name.
@@ -123,7 +123,7 @@ def img_neighbors(ref_image, png_dir):
     return closest_images_paths
 
 
-def predict_playlist_spectrograms(song='Castle Of Stars', artist='Ed Askew'):
+def predict_playlist(song='Castle Of Stars', artist='Ed Askew'):
     """Find 10 closest neighbors of the spectrogram of a given seed song
     to spectrograms of the songs in the png folder. Only single artist is
     supported. If the song is not in the dataset, return the song's name.
@@ -168,4 +168,4 @@ def predict_playlist_spectrograms(song='Castle Of Stars', artist='Ed Askew'):
 
 
 if __name__ == "__main__":
-    print(predict_playlist_spectrograms())
+    print(predict_playlist())
