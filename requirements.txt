@@ -1,12 +1,15 @@
-pytest
-pylint
 ipdb
 jupyterlab
-numpy
-pandas
+librosa
 matplotlib
+numpy
+opencv-python
+pandas
+pytest
+pylint
 seaborn
 scikit-learn
+scikit-image
 scipy
 
 # API
