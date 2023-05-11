@@ -13,8 +13,11 @@ RUN pip install .
 
 COPY Makefile Makefile
 
+# install cv2 dependencies
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+
 # local
-# CMD uvicorn sensuous.api.api_fast:api --host 0.0.0.0
+CMD uvicorn sensuous.api.api_fast:api --host 0.0.0.0
 
 # deploy to gcp
-CMD uvicorn sensuous.api.api_fast:api --host 0.0.0.0 --port $PORT
+# CMD uvicorn sensuous.api.api_fast:api --host 0.0.0.0 --port $PORT
