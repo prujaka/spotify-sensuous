@@ -1,6 +1,6 @@
 import pandas as pd
 
-from sensuous.ml_logic.model import predict_playlist
+from sensuous.ml_logic.model import predict_playlist_lewagon
 
 from fastapi import FastAPI
 
@@ -18,6 +18,6 @@ def dummy(song):
 
 # first model for predicting the 10 nearest songs
 @api.get("/predict")
-def predict(song: str, 
+def predict(song: str,
             artist: str):
-    return predict_playlist(song, artist)
+    return predict_playlist_lewagon(song, artist)
