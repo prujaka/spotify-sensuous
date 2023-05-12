@@ -12,7 +12,7 @@ docker_shell_run:
 	@docker run -it ${DOCKER_IMAGE_NAME_LOCAL} sh
 
 docker_gcr_build:
-	@docker build --platform linux/arm64/v8 -t ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} .
+	@docker buildx build --platform linux/amd64 -t ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} .
 
 docker_gcr_local_check:
 	@docker run -e PORT=8000 -p 8080:8000 ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}
