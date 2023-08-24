@@ -15,3 +15,8 @@ scipy
 # API
 fastapi
 uvicorn
+
+# Frontend
+streamlit
+requests
+spotipy
