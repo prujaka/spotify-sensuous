@@ -21,7 +21,7 @@ docker_gcr_push:
 	@docker push ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}
 
 docker_gcr_run:
-	@gcloud run deploy --image ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} --platform managed --region $GCR_REGION
+	@gcloud run deploy --image ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} --platform managed --region ${GCR_REGION}
 
 api_test_white_christmas:
 	@open http://localhost:8080/predict\?song\=White%20Christmas\&artist\=Frank%20Sinatra
