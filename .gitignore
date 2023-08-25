@@ -3,7 +3,7 @@
 data_raw/
 notebooks/.ipynb_checkpoints/
 **/__pycache__
-
+.streamlit/
 *.egg-info
 
 .env
