@@ -3,6 +3,7 @@ FROM python:3.8.6-buster
 
 # Api_folder and the requiremenets.txt file
 COPY sensuous sensuous
+COPY data data
 COPY setup.py setup.py
 COPY requirements.txt requirements.txt
 
