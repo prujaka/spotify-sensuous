@@ -1,8 +1,6 @@
 # This script has originally been written by Linda Sadrijaj
 # Modified and adapted by Sergey Tkachenko
 import streamlit as st
-import numpy as np
-import pandas as pd
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
