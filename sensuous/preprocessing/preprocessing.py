@@ -8,8 +8,8 @@ from sensuous.parameters import *
 
 
 def convert_audios_to_spectrograms(mp3_dir, png_dir):
-    """Converts all mp3 files in mp3_dir into spectrograms and save them
-    as png files to ouput_dir"""
+    """Convert all mp3 files in mp3_dir to spectrograms and save them
+    as png files to png_dir"""
     for mp3_file in os.listdir(mp3_dir):
         if mp3_file.endswith(".mp3"):
 
@@ -25,7 +25,7 @@ def convert_audios_to_spectrograms(mp3_dir, png_dir):
 
 
 def mp3_to_spectrogram(mp3_file):
-    """Converts a single mp3 file to the spectragram png"""
+    """Converts a single mp3 file to a png spectrogram"""
     # Load the mp3 file
     y, sr = librosa.load(mp3_file)
 
