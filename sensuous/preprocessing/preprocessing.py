@@ -1,10 +1,59 @@
 import os
 import numpy as np
+import pandas as pd
 import cv2
 import librosa
 from skimage.io import imsave
 from skimage.transform import resize
 from sensuous.parameters import *
+
+
+def semicolonize(s: str) -> str:
+    return ';'.join(s.strip("[]'").split("', '"))
+
+
+def listify(s: str) -> str:
+    s = s.split(';')
+    return str(s)
+
+
+def preprocess_csv_data() -> None:
+    df_lewagon_init = pd.read_csv('../data/lewagon-spotify-data.csv')
+    df_georg_init = pd.read_csv('../data/data-georgemcintire.csv')
+    df_mahar_init = pd.read_csv('../data/data-maharshipandya.csv')
+    df_tom_init = pd.read_csv('../data/data-tomigelo-2019-04.csv')
+
+    dfs_init = [df_lewagon_init, df_georg_init, df_mahar_init, df_tom_init]
+    columns_common_set = set.intersection(
+        *list(map(lambda df: set(df.columns), dfs_init)))
+    audio_features = sorted(list(columns_common_set))
+    columns = ['artists', 'song_title'] + audio_features
+
+    df_lewagon = df_lewagon_init.copy()
+    df_georg = df_georg_init.copy()
+    df_mahar = df_mahar_init.copy()
+    df_tom = df_tom_init.copy()
+
+    df_lewagon['artists'] = df_lewagon['artists'].map(semicolonize)
+    df_lewagon = df_lewagon.rename(columns={'name': 'song_title'})
+    df_georg = df_georg.rename(columns={'artist': 'artists'})
+    df_mahar = df_mahar.rename(columns={'track_name': 'song_title'})
+    df_tom = df_tom.rename(
+        columns={'track_name': 'song_title', 'artist_name': 'artists'})
+
+    df_lewagon = df_lewagon[columns]
+    df_georg = df_georg[columns]
+    df_mahar = df_mahar[columns]
+    df_tom = df_tom[columns]
+
+    dfs = [df_lewagon, df_georg, df_mahar, df_tom]
+
+    df = pd.concat([df_lewagon, df_georg, df_mahar, df_tom])
+    df = df[columns]
+    df = df.dropna().drop_duplicates().reset_index().drop(columns='index')
+
+    df['artists'] = df['artists'].map(listify)
+    df.to_csv('../data/all-songs.csv')
 
 
 def convert_audios_to_spectrograms(mp3_dir, png_dir):
