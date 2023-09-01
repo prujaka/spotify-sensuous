@@ -14,11 +14,11 @@ def listify(s: str) -> str:
     return str(s)
 
 
-def preprocess_csv_data() -> None:
-    df_lewagon_init = pd.read_csv('../data/lewagon-spotify-data.csv')
-    df_georg_init = pd.read_csv('../data/data-georgemcintire.csv')
-    df_mahar_init = pd.read_csv('../data/data-maharshipandya.csv')
-    df_tom_init = pd.read_csv('../data/data-tomigelo-2019-04.csv')
+def preprocess_csv_data(csv_dir: str = '../data') -> None:
+    df_lewagon_init = pd.read_csv(f'{csv_dir}/lewagon-spotify-data.csv')
+    df_georg_init = pd.read_csv(f'{csv_dir}/data-georgemcintire.csv')
+    df_mahar_init = pd.read_csv(f'{csv_dir}/data-maharshipandya.csv')
+    df_tom_init = pd.read_csv(f'{csv_dir}/data-tomigelo-2019-04.csv')
 
     dfs_init = [df_lewagon_init, df_georg_init, df_mahar_init, df_tom_init]
     columns_common_set = set.intersection(
@@ -44,11 +44,14 @@ def preprocess_csv_data() -> None:
     df_tom = df_tom[columns]
 
     dfs = [df_lewagon, df_georg, df_mahar, df_tom]
-
-    df = pd.concat([df_lewagon, df_georg, df_mahar, df_tom])
+    df = pd.concat(dfs)
     df = df[columns]
     df = df.dropna().drop_duplicates().reset_index().drop(columns='index')
 
     df['artists'] = df['artists'].map(listify)
-    df.to_csv('../data/all-songs.csv')
+
+    df.to_csv(f'{csv_dir}/all-songs.csv')
+
+    print('Csv data preprocessing done, saved the cleaned data to file '
+          f'"{csv_dir}/all-songs.csv"')
 
