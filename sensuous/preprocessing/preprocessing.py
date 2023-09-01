@@ -9,10 +9,14 @@ from sensuous.parameters import *
 
 
 def semicolonize(s: str) -> str:
+    """Strip a list-looking string s from brackets and single quotes
+    and put a semicolon as a separator instead"""
     return ';'.join(s.strip("[]'").split("', '"))
 
 
 def listify(s: str) -> str:
+    """Remove a semicolon as a separator of a string s and format it as
+    a list-looking string"""
     s = s.split(';')
     return str(s)
 
