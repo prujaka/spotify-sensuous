@@ -1,9 +1,11 @@
+import os
 import numpy as np
 import cv2
 import librosa
 from skimage.io import imsave
 from skimage.transform import resize
 import sensuous.parameters as params
+
 
 def convert_audios_to_spectrograms(mp3_dir, png_dir):
     """Convert all mp3 files in mp3_dir to spectrograms and save them
