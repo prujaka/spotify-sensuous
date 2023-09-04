@@ -4,41 +4,50 @@ import streamlit as st
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from sensuous.parameters import GCR_API_URL
-
-# Define your Spotify API credentials
-client_id = st.secrets['CLIENT_ID']
-client_secret = st.secrets['CLIENT_SECRET']
-client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-# Define the URL of your FastAPI application
-fastapi_url = GCR_API_URL
-
-st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
-
-# App title
-st.title("""Song Explorer :rocket:: _Discover Similar Songs Based on 
-Your Favorites_""")
+import sensuous.parameters as params
 
 
-# Add vinyl record image to header
-st.image("img/image.jpg")
-
-st.markdown(""" Just pop your favorite song into our machine learning tool, and let us take care of the rest!
-            We'll analyze the song's spectrogram and suggest other tracks that match your style, making it super easy to discover new music that you're bound to love! :hearts:
-""")
-
-
-def predict_playlist(song, artist):
+def predict_playlist(song, artist, url):
     # Make a request to FastAPI
-    response = requests.get(fastapi_url + "/predict", params={"song": song, "artist": artist})
+    response = requests.get(url + "/predict", params={"song": song,
+                                                      "artist": artist})
 
     # Return the prediction result
     return response.json()['playlist']
 
 
 def main():
+    # Define your Spotify API credentials
+    client_id = st.secrets['CLIENT_ID']
+    client_secret = st.secrets['CLIENT_SECRET']
+    client_credentials_manager = SpotifyClientCredentials(client_id,
+                                                          client_secret)
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    # Define the URL of your FastAPI application
+    if params.API_TYPE == 'local':
+        fastapi_url = params.API_URL_LOCAL
+    elif params.API_TYPE == 'cloud':
+        fastapi_url = params.API_URL_CLOUD
+    else:
+        print("Unknown API type. It should be either 'local' or 'cloud'")
+
+    st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
+
+    # App title
+    st.title("""Song Explorer :rocket:: _Discover Similar Songs Based on 
+    Your Favorites_""")
+
+    # Add vinyl record image to header
+    st.image("img/image.jpg")
+
+    st.markdown(
+        "Just pop your favorite song into our tool and let us take care "
+        "of the rest!\n"
+        "We'll analyze the song's features and suggest other tracks"
+        "that match your style, making it super easy to discover new music"
+        "that you're bound to love! :hearts:")
+
     # Header 2
     st.markdown("### Enter a song here :musical_note:")
 
@@ -56,7 +65,7 @@ def main():
         pass  # don't display any message if input is empty
     else:
         try:
-            playlist = predict_playlist(song, artist)
+            playlist = predict_playlist(song, artist, url=fastapi_url)
             st.write(f"We will be happy to make suggestions based on your choice: {song} by {artist}")
             st.markdown("### Our ML model suggests the following songs :raised_hands::")
             for index, item in enumerate(playlist):
@@ -75,6 +84,7 @@ def main():
             st.write(":musical_note: Enjoy your playlist! :musical_note:", unsafe_allow_html=True)
         except:
             st.write(":rotating_light: Oops! Something went wrong. Please make sure you spelled the song and artist names correctly and try again.")
+
 
 if __name__ == "__main__":
     main()
