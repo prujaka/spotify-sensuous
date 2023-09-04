@@ -1,4 +1,4 @@
-from sensuous.model.knn import predict_playlist_lewagon
+from sensuous.model.knn import predict_playlist_csv
 from fastapi import FastAPI
 
 # TODO: output a link to docs and to test prediction?
@@ -22,4 +22,4 @@ def dummy(song):
 @api.get("/predict")
 def predict(song: str,
             artist: str):
-    return predict_playlist_lewagon(song, artist)
+    return predict_playlist_csv(song, artist)
