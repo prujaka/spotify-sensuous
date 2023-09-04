@@ -1,9 +1,10 @@
+# This script has originally been written by Linda Sadrijaj
+# Modified and adapted by Sergey Tkachenko
 import streamlit as st
-import numpy as np
-import pandas as pd
 import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from sensuous.parameters import GCR_API_URL
 
 # Define your Spotify API credentials
 client_id = st.secrets['CLIENT_ID']
@@ -12,7 +13,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Define the URL of your FastAPI application
-fastapi_url = "https://sensuous-kxfwockblq-ew.a.run.app"
+fastapi_url = GCR_API_URL
 
 st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
 
