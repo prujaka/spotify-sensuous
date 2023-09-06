@@ -28,7 +28,7 @@ def main():
     if params.API_TYPE == 'local':
         fastapi_url = params.API_URL_LOCAL
     elif params.API_TYPE == 'cloud':
-        fastapi_url = params.API_URL_CLOUD
+        fastapi_url = st.secrets['API_URL_CLOUD']
     else:
         print("Unknown API type. It should be either 'local' or 'cloud'")
 
