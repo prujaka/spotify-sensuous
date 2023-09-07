@@ -7,9 +7,9 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import sensuous.parameters as params
 
 
-def predict_playlist(song, artist, url):
-    response = requests.get(url + "/predict", params={"song": song,
-                                                      "artist": artist})
+def predict_playlist(artist, song, url):
+    response = requests.get(url + "/predict", params={"artist": artist,
+                                                      "song": song})
     return response.json()['playlist']
 
 
@@ -52,7 +52,7 @@ def main():
     if song == '' or artist == '':
         print('Empty artist or song name. Please enter the full search query.')
     else:
-        playlist = predict_playlist(song, artist, url=fastapi_url)
+        playlist = predict_playlist(artist, song, url=fastapi_url)
         st.write(f"We will be happy to make suggestions based "
                  f"on your choice: {song} by {artist}")
         st.markdown("### Our ML model suggests the following songs "
