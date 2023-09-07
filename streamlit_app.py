@@ -52,13 +52,15 @@ def main():
     st.markdown("### Enter a song here :musical_note:")
 
     # Input song
-    song = str(st.text_input('You can write the title of your favorite song here, but make sure you spell it right :eyes:'))
+    song = str(st.text_input('You can write the title of your favorite song'
+                             'here, but make sure you spell it right :eyes:'))
 
     # Header 2
     st.markdown("### Enter an artist here :singer:")
 
     # Input artist
-    artist = str(st.text_input('You can write the artist of your favorite song here, but make sure you spell it right :eyes:'))
+    artist = str(st.text_input('You can write the artist of your favorite song'
+                               'here, but make sure you spell it right :eyes:'))
 
     # Display appropriate message
     if song == '' or artist == '':
@@ -66,13 +68,16 @@ def main():
     else:
         try:
             playlist = predict_playlist(song, artist, url=fastapi_url)
-            st.write(f"We will be happy to make suggestions based on your choice: {song} by {artist}")
-            st.markdown("### Our ML model suggests the following songs :raised_hands::")
+            st.write(f"We will be happy to make suggestions based "
+                     f"on your choice: {song} by {artist}")
+            st.markdown("### Our ML model suggests the following songs "
+                        ":raised_hands::")
             for index, item in enumerate(playlist):
                 # Retrieve the song's audio preview URL using the Spotify API
-                track_results = sp.search(q=f"{item[0]} {item[1]}", type='track', limit=1)
-                if len(track_results['tracks']['items']) > 0:
-                    preview_url = track_results['tracks']['items'][0]['preview_url']
+                results = sp.search(q=f"{item[0]} {item[1]}",
+                                    type='track', limit=1)
+                if len(results['tracks']['items']) > 0:
+                    preview_url = results['tracks']['items'][0]['preview_url']
                 else:
                     preview_url = ''
 
@@ -81,9 +86,12 @@ def main():
                 if preview_url:
                     st.audio(preview_url, format='audio/mp3')
                 st.write('---')
-            st.write(":musical_note: Enjoy your playlist! :musical_note:", unsafe_allow_html=True)
+            st.write(":musical_note: Enjoy your playlist! :musical_note:",
+                     unsafe_allow_html=True)
         except:
-            st.write(":rotating_light: Oops! Something went wrong. Please make sure you spelled the song and artist names correctly and try again.")
+            st.write(":rotating_light: Oops! Something went wrong. "
+                     "Please make sure you spelled the song and artist names "
+                     "correctly and try again.")
 
 
 if __name__ == "__main__":
