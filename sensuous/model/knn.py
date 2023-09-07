@@ -9,8 +9,8 @@ def strip_artists(s):
     return s.replace("['", "").replace("']", "").replace("', '", ", ")
 
 
-def predict_playlist_csv(song_title: str = 'White Christmas',
-                         artist: str = 'Frank Sinatra',
+def predict_playlist_csv(artist: str = 'Frank Sinatra',
+                         song_title: str = 'White Christmas',
                          n_neighbors: int = 10,
                          data_dir: str = 'data'):
     """Find `n_neighbors` closest neighbors of a given seed song in an audio
@@ -19,11 +19,11 @@ def predict_playlist_csv(song_title: str = 'White Christmas',
 
     Parameters
     ----------
-    song_title : str
-        Song's name.
-
     artist : str
         Artist's name.
+
+    song_title : str
+        Song's name.
 
     n_neighbors : int
         Number of neighbors to the seed song.
