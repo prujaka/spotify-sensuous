@@ -68,7 +68,7 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
     artists = [
         strip_artists(artist) for artist in neighbors_df['artists'].tolist()
     ]
-    playlist = {'playlist': list(zip(songs, artists))}
+    playlist = {'playlist': list(zip(artists, songs))}
     return playlist
 
 
