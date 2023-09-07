@@ -52,7 +52,7 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
         print("No such a song in the dataset. Returning the user's entry.")
         return f'{song_title} by {artist}'
     elif seed_song.shape[0] > 1:
-        print("There is more than one entry. Returning the search results.")
+        print("There is more than one entry. Returning the user's entry.")
         return seed_song
 
     # Feature "preprocessing"
