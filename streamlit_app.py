@@ -22,12 +22,9 @@ def main():
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     # Define the URL of your FastAPI application
+    fastapi_url = st.secrets['API_URL_CLOUD']
     if params.API_TYPE == 'local':
         fastapi_url = params.API_URL_LOCAL
-    elif params.API_TYPE == 'cloud':
-        fastapi_url = st.secrets['API_URL_CLOUD']
-    else:
-        print("Unknown API type. It should be either 'local' or 'cloud'")
 
     st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
 
