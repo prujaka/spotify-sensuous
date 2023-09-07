@@ -1,6 +1,8 @@
 import os
 
-API_TYPE = 'cloud'  # 'local' or 'cloud'
+# If 'local', then the API link would be API_URL_LOCAL. Otherwise, it will
+# be read from .streamlit/secrets.toml
+API_TYPE = 'cloud'
 
 API_URL_LOCAL = "http://0.0.0.0:8000"
 
