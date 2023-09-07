@@ -25,3 +25,6 @@ docker_gcr_run:
 
 api_test_white_christmas:
 	@open http://localhost:8080/predict\?song\=White%20Christmas\&artist\=Frank%20Sinatra
+
+run_local_api:
+	@uvicorn sensuous.api.api_fast:api --host 0.0.0.0
