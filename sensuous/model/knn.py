@@ -9,8 +9,8 @@ def strip_artists(s):
     return s.replace("['", "").replace("']", "").replace("', '", ", ")
 
 
-def predict_playlist_csv(song_title: str = 'White Christmas',
-                         artist: str = 'Frank Sinatra',
+def predict_playlist_csv(artist: str = 'Frank Sinatra',
+                         song_title: str = 'White Christmas',
                          n_neighbors: int = 10,
                          data_dir: str = 'data'):
     """Find `n_neighbors` closest neighbors of a given seed song in an audio
@@ -19,11 +19,11 @@ def predict_playlist_csv(song_title: str = 'White Christmas',
 
     Parameters
     ----------
-    song_title : str
-        Song's name.
-
     artist : str
         Artist's name.
+
+    song_title : str
+        Song's name.
 
     n_neighbors : int
         Number of neighbors to the seed song.
@@ -52,7 +52,7 @@ def predict_playlist_csv(song_title: str = 'White Christmas',
         print("No such a song in the dataset. Returning the user's entry.")
         return f'{song_title} by {artist}'
     elif seed_song.shape[0] > 1:
-        print("There is more than one entry. Returning the search results.")
+        print("There is more than one entry. Returning the user's entry.")
         return seed_song
 
     # Feature "preprocessing"
@@ -68,7 +68,7 @@ def predict_playlist_csv(song_title: str = 'White Christmas',
     artists = [
         strip_artists(artist) for artist in neighbors_df['artists'].tolist()
     ]
-    playlist = {'playlist': list(zip(songs, artists))}
+    playlist = {'playlist': list(zip(artists, songs))}
     return playlist
 
 
