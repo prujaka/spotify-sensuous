@@ -29,8 +29,7 @@ def main():
     st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
 
     # App title
-    st.title("""Song Explorer :rocket:: _Discover Similar Songs Based on 
-    Your Favorites_""")
+    st.title("Song Explorer: discover similar songs based on your favourites")
 
     # Add vinyl record image to header
     st.image("img/image.jpg")
@@ -38,23 +37,17 @@ def main():
     st.markdown(
         "Just pop your favorite song into our tool and let us take care "
         "of the rest!\n"
-        "We'll analyze the song's features and suggest other tracks"
-        "that match your style, making it super easy to discover new music"
+        "We'll analyze the song's features and suggest other tracks "
+        "that match its style, making it super easy to discover new music "
         "that you're bound to love! :hearts:")
 
-    # Header 2
-    st.markdown("### Enter a song here :musical_note:")
-
-    # Input song
-    song = str(st.text_input('You can write the title of your favorite song'
-                             'here, but make sure you spell it right :eyes:'))
-
-    # Header 2
     st.markdown("### Enter an artist here :singer:")
-
-    # Input artist
     artist = str(st.text_input('You can write the artist of your favorite song'
                                'here, but make sure you spell it right :eyes:'))
+
+    st.markdown("### Enter a song here :musical_note:")
+    song = str(st.text_input('You can write the title of your favorite song'
+                             'here, but make sure you spell it right :eyes:'))
 
     if song == '' or artist == '':
         print('Empty artist or song name. Please enter the full search query.')
