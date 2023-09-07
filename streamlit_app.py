@@ -8,11 +8,8 @@ import sensuous.parameters as params
 
 
 def predict_playlist(song, artist, url):
-    # Make a request to FastAPI
     response = requests.get(url + "/predict", params={"song": song,
                                                       "artist": artist})
-
-    # Return the prediction result
     return response.json()['playlist']
 
 
@@ -62,36 +59,30 @@ def main():
     artist = str(st.text_input('You can write the artist of your favorite song'
                                'here, but make sure you spell it right :eyes:'))
 
-    # Display appropriate message
     if song == '' or artist == '':
-        pass  # don't display any message if input is empty
+        print('Empty artist or song name. Please enter the full search query.')
     else:
-        try:
-            playlist = predict_playlist(song, artist, url=fastapi_url)
-            st.write(f"We will be happy to make suggestions based "
-                     f"on your choice: {song} by {artist}")
-            st.markdown("### Our ML model suggests the following songs "
-                        ":raised_hands::")
-            for index, item in enumerate(playlist):
-                # Retrieve the song's audio preview URL using the Spotify API
-                results = sp.search(q=f"{item[0]} {item[1]}",
-                                    type='track', limit=1)
-                if len(results['tracks']['items']) > 0:
-                    preview_url = results['tracks']['items'][0]['preview_url']
-                else:
-                    preview_url = ''
+        playlist = predict_playlist(song, artist, url=fastapi_url)
+        st.write(f"We will be happy to make suggestions based "
+                 f"on your choice: {song} by {artist}")
+        st.markdown("### Our ML model suggests the following songs "
+                    ":raised_hands::")
+        for index, item in enumerate(playlist):
+            # Retrieve the song's audio preview URL using the Spotify API
+            results = sp.search(q=f"{item[0]} {item[1]}",
+                                type='track', limit=1)
+            if len(results['tracks']['items']) > 0:
+                preview_url = results['tracks']['items'][0]['preview_url']
+            else:
+                preview_url = ''
 
-                # Display the song information and an audio player
-                st.write(f"**{index + 1}.** {item[0]}\n by {item[1]}\n")
-                if preview_url:
-                    st.audio(preview_url, format='audio/mp3')
-                st.write('---')
-            st.write(":musical_note: Enjoy your playlist! :musical_note:",
-                     unsafe_allow_html=True)
-        except:
-            st.write(":rotating_light: Oops! Something went wrong. "
-                     "Please make sure you spelled the song and artist names "
-                     "correctly and try again.")
+            # Display the song information and an audio player
+            st.write(f"**{index + 1}.** {item[0]}\n by {item[1]}\n")
+            if preview_url:
+                st.audio(preview_url, format='audio/mp3')
+            st.write('---')
+        st.write(":musical_note: Enjoy your playlist! :musical_note:",
+                 unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
