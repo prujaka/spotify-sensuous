@@ -29,10 +29,10 @@ def main():
     st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
 
     # App title
-    st.title("Song Explorer: discover similar songs based on your favourites")
+    st.title("Sensuous Recommendation System for Spotify")
 
     # Add vinyl record image to header
-    st.image("img/image.jpg")
+    st.image("img/sensuous-pic.jpg")
 
     st.markdown(
         "Just pop your favorite song into our tool and let us take care "
