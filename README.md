@@ -26,19 +26,19 @@ direnv reload .
 
 Build container locally
 
-```bash
+```zsh
 make docker_local_build
 ```
 
 You can run container shell
 
-```bash
+```zsh
 make docker_shell_run
 ```
 
 You can run container locally
 
-```bash
+```zsh
 make docker_local_run
 ```
 
@@ -46,19 +46,19 @@ And connect to it: http://localhost:8080/
 
 List running containers
 
-```bash
+```zsh
 docker ps
 ```
 
 Stop container
 
-```bash
+```zsh
 docker stop <container_id>
 ```
 
 or
 
-```bash
+```zsh
 docker kill <container_id>
 ```
 
@@ -68,7 +68,7 @@ Go to the GCP console, to Container Registry, and enable the service.
 
 ### Authenticate docker
 
-```bash
+```zsh
 gcloud auth configure-docker
 ```
 
@@ -76,25 +76,25 @@ gcloud auth configure-docker
 
 You need to define your project ID.
 
-```bash
+```zsh
 docker build -t ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${$DOCKER_IMAGE_NAME} .
 ```
 
 ⚠️ APPLE M1 Silicon users must build like this:
 
-```bash
+```zsh
 make docker_gcr_build
 ```
 
 At this point, check that it works locally before final push:
 
-```bash
+```zsh
 make docker_gcr_local_check
 ```
 
 And if it does, you can finally push to Google Container Registry:
 
-```bash
+```zsh
 make docker_gcr_push
 ```
 
@@ -102,6 +102,6 @@ make docker_gcr_push
 
 Finally, you need to make your api continuously avilable. Go to the GCP console, to Cloud Run, and enable the service. You might also have to enable Cloud Run API.
 
-```bash
+```zsh
 make docker_gcr_run
 ```
