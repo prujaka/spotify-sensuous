@@ -1,5 +1,5 @@
 # Standard image which has python installed
-FROM python:3.8.6-buster
+FROM python:3.10.6-buster
 
 # Api_folder and the requiremenets.txt file
 COPY sensuous sensuous
