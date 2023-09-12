@@ -40,6 +40,10 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
     """
     prep.preprocess_csv_data(csv_dir=data_dir)
     df = pd.read_csv(os.path.join(data_dir, 'all-songs.csv'))
+    try:
+        df = df.drop(columns='Unnamed: 0')
+    except KeyError:
+        print('Not found the "Unnamed: 0" column in the dataframe. Resuming...')
     df_numeric = df.drop(columns=['artists', 'song_title'])
     columns = df_numeric.columns.values.tolist()
     df_scaler = MinMaxScaler()
