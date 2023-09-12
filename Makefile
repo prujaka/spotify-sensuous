@@ -24,7 +24,7 @@ docker_gcr_run:
 	@gcloud run deploy --image ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} --platform managed --region ${GCR_REGION}
 
 api_test_white_christmas:
-	@open http://localhost:8080/predict\?artist\=Frank%20Sinatra&song\=White%20Christmas\
+	@open "http://0.0.0.0:8000/predict?artist=Frank%20Sinatra&song=White%20Christmas"
 
 run_local_api:
 	@uvicorn sensuous.api.api_fast:api --host 0.0.0.0
