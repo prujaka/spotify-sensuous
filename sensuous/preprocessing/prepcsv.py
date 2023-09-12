@@ -55,3 +55,7 @@ def preprocess_csv_data(csv_dir: str = '../data') -> None:
     print('Csv data preprocessing done, saved the cleaned data to file '
           f'"{csv_dir}/all-songs.csv"')
 
+
+if __name__ == '__main__':
+    data_dir = "../../data"
+    preprocess_csv_data(csv_dir=data_dir)
