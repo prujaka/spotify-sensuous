@@ -38,8 +38,9 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
         List of tuples of the closest songs. First element of a tuple is
         a song name, the second one is the artist(s).
     """
-    prep.preprocess_csv_data(csv_dir=data_dir)
+    # prep.preprocess_csv_data(csv_dir=data_dir)
     df = pd.read_csv(os.path.join(data_dir, 'all-songs.csv'))
+    df = df.dropna()
     try:
         df = df.drop(columns='Unnamed: 0')
     except KeyError:
