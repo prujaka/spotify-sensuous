@@ -2,6 +2,7 @@ import pandas as pd
 import scipy as sp
 import os
 from sklearn.preprocessing import MinMaxScaler
+from sensuous.preprocessing import prepcsv as prep
 
 
 def strip_artists(s):
@@ -37,7 +38,12 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
         List of tuples of the closest songs. First element of a tuple is
         a song name, the second one is the artist(s).
     """
+    prep.preprocess_csv_data(csv_dir=data_dir)
     df = pd.read_csv(os.path.join(data_dir, 'all-songs.csv'))
+    try:
+        df = df.drop(columns='Unnamed: 0')
+    except KeyError:
+        print('Not found the "Unnamed: 0" column in the dataframe. Resuming...')
     df_numeric = df.drop(columns=['artists', 'song_title'])
     columns = df_numeric.columns.values.tolist()
     df_scaler = MinMaxScaler()
@@ -46,6 +52,7 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
     criterion = ((df['artists'].map(lambda x: artist in x)
                   | df['song_title'].map(lambda x: 'feat. ' + artist in x))
                  & (df['song_title'].map(lambda x: song_title in x)))
+
     seed_song = df[criterion]
 
     if seed_song.shape[0] == 0:
