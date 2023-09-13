@@ -20,7 +20,7 @@ docker_gcr_local_check:
 docker_gcr_push:
 	@docker push ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}
 
-docker_gcr_run:
+docker_gcr_deploy:
 	@gcloud run deploy --image ${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME} --platform managed --region ${GCR_REGION}
 
 api_test_white_christmas:
