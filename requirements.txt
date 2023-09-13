@@ -5,7 +5,7 @@ librosa
 matplotlib
 numpy
 opencv-python
-pandas
+pandas==1.5.3
 pytest
 pylint
 seaborn
