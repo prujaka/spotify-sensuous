@@ -6,6 +6,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sensuous.parameters as params
 
+API_TYPE = 'local'
+API_URL_LOCAL = "http://0.0.0.0:8000"
+
 
 def predict_playlist(artist, song, url):
     response = requests.get(url + "/predict", params={"artist": artist,
@@ -22,9 +25,12 @@ def main():
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     # Define the URL of your FastAPI application
-    fastapi_url = st.secrets['API_URL_CLOUD']
-    if params.API_TYPE == 'local':
-        fastapi_url = params.API_URL_LOCAL
+    if API_TYPE == 'local':
+        fastapi_url = API_URL_LOCAL
+    elif API_TYPE == 'cloud':
+        fastapi_url = st.secrets['API_URL_CLOUD']
+    else:
+        raise Exception("API type unknown. Should be 'cloud' or 'local'")
 
     st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
 
