@@ -6,7 +6,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sensuous.parameters as params
 
-API_TYPE = 'local'
+API_TYPE = 'cloud'
 API_URL_LOCAL = "http://0.0.0.0:8000"
 
 
