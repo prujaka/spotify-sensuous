@@ -3,9 +3,11 @@ from fastapi import FastAPI
 
 api = FastAPI()
 
+
 @api.get("/")
 def index():
     return {"status": "API connected"}
+
 
 @api.get("/predict")
 def predict(artist: str, song: str):
