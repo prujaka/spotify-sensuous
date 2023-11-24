@@ -28,8 +28,7 @@ docker_gcr_deploy:
 		--platform managed --region ${GCR_REGION}
 
 api_test_white_christmas:
-	@open http://0.0.0.0:8000/predict$\
-		?artist=Frank%20Sinatra&song=White%20Christmas
+	@open "http://0.0.0.0:8000/predict?artist=Frank%20Sinatra&song=White%20Christmas"
 
 run_local_api:
 	@uvicorn sensuous.api.api_fast:api --host 0.0.0.0
