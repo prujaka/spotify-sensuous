@@ -14,6 +14,7 @@ def predict_playlist(artist, song, url):
                                                       "song": song})
     return response.json()['playlist']
 
+
 def main():
     # Define your Spotify API credentials
     client_id = st.secrets['CLIENT_ID']
