@@ -5,8 +5,7 @@ import requests
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sensuous.parameters as params
-
-API_TYPE = 'cloud'
+API_TYPE = 'local'
 API_URL_LOCAL = "http://0.0.0.0:8000"
 
 
@@ -14,7 +13,6 @@ def predict_playlist(artist, song, url):
     response = requests.get(url + "/predict", params={"artist": artist,
                                                       "song": song})
     return response.json()['playlist']
-
 
 def main():
     # Define your Spotify API credentials
@@ -65,7 +63,7 @@ def main():
                     ":raised_hands::")
         for index, item in enumerate(playlist):
             # Retrieve the song's audio preview URL using the Spotify API
-            results = sp.search(q=f"{item[0]} {item[1]}",
+            results = sp.search(q=f"{item['artist']} {item['song']}",
                                 type='track', limit=1)
             if len(results['tracks']['items']) > 0:
                 preview_url = results['tracks']['items'][0]['preview_url']
@@ -73,7 +71,7 @@ def main():
                 preview_url = ''
 
             # Display the song information and an audio player
-            st.write(f"**{index + 1}.** {item[0]}\n by {item[1]}\n")
+            st.write(f"**{index + 1}.** {item['artist']}\n by {item['song']}\n")
             if preview_url:
                 st.audio(preview_url, format='audio/mp3')
             st.write('---')
