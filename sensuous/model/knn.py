@@ -15,7 +15,7 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
                          n_neighbors: int = 10,
                          data_dir: str = 'data'):
     """Find `n_neighbors` closest neighbors of a given seed song in an audio
-    feature space of le wagon spotify dataset. Only single artist is supported.
+    feature space of all-songs.csv dataset. Only single artist is supported.
     If the song is not in the dataset, return the song's name.
 
     Parameters
