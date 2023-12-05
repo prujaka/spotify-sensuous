@@ -1,9 +1,14 @@
 # This script has originally been written by Linda Sadrijaj
 # Modified and adapted by Sergey Tkachenko
-import streamlit as st
+import pandas
+import pandas as pd
 import requests
 import spotipy
+import streamlit as st
+
 from spotipy.oauth2 import SpotifyClientCredentials
+
+from sensuous.preprocessing.prepcsv import semicolonize
 
 API_TYPE = 'local'
 API_URL_LOCAL = 'http://0.0.0.0:8000'
@@ -31,6 +36,12 @@ def main():
     else:
         raise Exception("API type unknown. Should be 'cloud' or 'local'")
 
+    # Read the csv data and form sample suggestions
+    df = pd.read_csv('data/all-songs.csv')
+    df_suggestions = df[['artists', 'song_title']].sample(10).reset_index()
+    df_suggestions = df_suggestions.drop('index', axis=1)
+    df_suggestions['artists'] = df_suggestions['artists'].map(semicolonize)
+
     st.set_page_config(page_title='Sensuous Rec. System',
                        page_icon=':musical_note:')
 
@@ -47,6 +58,10 @@ def main():
         " the audio profile. Explore new music effortlessly, discovering"
         " tunes that are sure to resonate with your preferences!")
 
+    st.markdown(f"Our database currently contains {len(df)} songs. "
+                f"Here are some suggestions:")
+    st.table(df_suggestions)
+
     st.markdown("### Enter an artist here")
     artist = str(st.text_input("Please enter the artist's name exactly as"
                                " it is. In the case of multiple artists,"
@@ -59,8 +74,6 @@ def main():
         print("Empty artist or song name. Please enter the full search query.")
     else:
         playlist = predict_playlist(artist, song, url=fastapi_url)
-        st.write(f"We will be happy to make suggestions based "
-                 f"on your choice: {song} by {artist}")
         st.markdown("### Our ML model suggests the following songs:")
         for index, item in enumerate(playlist):
             # Retrieve the song's audio preview URL using the Spotify API
