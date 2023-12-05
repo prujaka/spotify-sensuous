@@ -62,16 +62,20 @@ def main():
                 f"Here are some suggestions:")
     st.table(df_suggestions)
 
-    st.markdown("### Enter an artist here")
-    artist = str(st.text_input("Please enter the artist's name exactly as"
-                               " it is. In the case of multiple artists,"
-                               " simply input one of them."))
+    with st.form(key='artist_song_form'):
+        st.markdown("### Enter an artist here")
+        artist = str(st.text_input("Please enter the artist's name exactly as"
+                                   " it is. In the case of multiple artists,"
+                                   " simply input one of them."))
 
-    st.markdown("### Enter a song here")
-    song = str(st.text_input("Please enter the song title exactly as it is."))
+        st.markdown("### Enter a song here")
+        song = str(st.text_input("Please enter the song title exactly as"
+                                 " it is."))
+        submit_button = st.form_submit_button(label='Submit')
 
     if song == '' or artist == '':
-        print("Empty artist or song name. Please enter the full search query.")
+        st.write("Empty artist or song name."
+                 " Please enter the full search query.")
     else:
         playlist = predict_playlist(artist, song, url=fastapi_url)
         st.markdown("### Our ML model suggests the following songs:")
