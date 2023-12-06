@@ -1,5 +1,12 @@
 # spotify-sensuous
 
+Welcome to Sensuous Recommendation System for Spotify!
+This is a prototype of a recommendation system which proposes you a song radio
+based solely on the audio features of the track.
+No collaborative filtering or listening history, only the pure sound.
+Powered by a custom API built with FastAPI and a user interface
+crafted with Streamlit.
+
 ## Getting started
 Install the python package of the project by running the following command:
 ```zsh
