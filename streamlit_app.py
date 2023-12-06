@@ -1,6 +1,5 @@
 # This script has originally been written by Linda Sadrijaj
 # Modified and adapted by Sergey Tkachenko
-import pandas
 import pandas as pd
 import requests
 import spotipy
@@ -10,15 +9,27 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 from sensuous.preprocessing.prepcsv import semicolonize
 
-API_TYPE = 'local'
+API_TYPE = 'cloud'
 API_URL_LOCAL = 'http://0.0.0.0:8000'
 
 
-def predict_playlist(artist, song, url):
+def api_predict_request(artist, song, url):
     response = requests.get(f'{url}/predict', params={'artist': artist,
                                                       'song': song})
-    return response.json()['playlist']
+    return response.json()
 
+
+def output_message(request):
+    if request['code'] == 0:
+        return "### Sorry, no match to the user's input in our database." \
+               "\n#### Also, you've been rickrolled:"
+
+    if request['code'] == 1:
+        return "### Several songs found from the user's input. " \
+               "Take a listen and choose one of them as your input."
+
+    if request['code'] == 2:
+        return "### Our ML model suggests the following songs:"
 
 def main():
     # Define your Spotify API credentials
@@ -58,8 +69,8 @@ def main():
         " the audio profile. Explore new music effortlessly, discovering"
         " tunes that are sure to resonate with your preferences!")
 
-    st.markdown(f"Our database currently contains {len(df)} songs. "
-                f"Here are some suggestions:")
+    st.markdown(f"Our database currently contains {len(df)} songs."
+                f" Here are some suggestions:")
     st.table(df_suggestions)
 
     with st.form(key='artist_song_form'):
@@ -73,12 +84,16 @@ def main():
                                  " it is."))
         submit_button = st.form_submit_button(label='Submit')
 
-    if song == '' or artist == '':
+    if song.strip() == '' or artist.strip() == '':
         st.write("Empty artist or song name."
-                 " Please enter the full search query.")
+                 " Please enter the search query.")
     else:
-        playlist = predict_playlist(artist, song, url=fastapi_url)
-        st.markdown("### Our ML model suggests the following songs:")
+        request = api_predict_request(artist, song, url=fastapi_url)
+        playlist = request['playlist']
+
+        message = output_message(request)
+        st.markdown(message)
+
         for index, item in enumerate(playlist):
             # Retrieve the song's audio preview URL using the Spotify API
             results = sp.search(q=f"{item['artist']} {item['song']}",
