@@ -32,12 +32,12 @@ echo 'CLIENT_SECRET = "YOUR_CLIENT_SECRET"' >> secrets.toml
 
 Run the API locally on your machine:
 ```zsh
-make run_local_api
+make api_local_run
 ```
 
 Then, run the Streamlit local server on your machine:
 ```zsh
-streamlit run streamlit_app.py
+make streamlit_local_run
 ```
 and see further instructions on the web page that opens.
 

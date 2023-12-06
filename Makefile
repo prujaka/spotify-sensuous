@@ -27,11 +27,12 @@ docker_gcr_deploy:
 		${GCR_MULTI_REGION}/${GCP_PROJECT_ID}/${DOCKER_IMAGE_NAME}\
 		--platform managed --region ${GCR_REGION}
 
-api_test_white_christmas:
+white_christmas:
 	@open "http://0.0.0.0:8000/predict?artist=Frank%20Sinatra&song=White%20Christmas"
 
-run_local_api:
+api_local_run:
 	@uvicorn sensuous.api.api_fast:api --host 0.0.0.0
 
-streamlit:
-	@streamlit run streamlit_app.py
+streamlit_local_run:
+	@streamlit run streamlit_app.py -- --api-url "http://0.0.0.0:8000"
+
