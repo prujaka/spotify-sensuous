@@ -1,24 +1,16 @@
 from sensuous.model.knn import predict_playlist_csv
 from fastapi import FastAPI
 
-# TODO: output a link to docs and to test prediction?
-
 api = FastAPI()
 
 
-# root
 @api.get("/")
 def index():
+    """Displays welcome message when API is connected"""
     return {"status": "API connected"}
 
 
-# dummy predict endpoint
-@api.get("/dummy")
-def dummy(song):
-    return {'song recommendation': song}
-
-
-# first model for predicting the 10 nearest songs
 @api.get("/predict")
 def predict(artist: str, song: str):
+    """Predicts the playlist based on the user's input"""
     return predict_playlist_csv(artist, song)

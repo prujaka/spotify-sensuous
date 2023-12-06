@@ -15,6 +15,7 @@ def listify(s: str) -> str:
 
 
 def preprocess_csv_data(csv_dir: str = '../data') -> None:
+    """Clean the four available datasets and merge them into one"""
     df_lewagon_init = pd.read_csv(f'{csv_dir}/lewagon-spotify-data.csv')
     df_georg_init = pd.read_csv(f'{csv_dir}/data-georgemcintire.csv')
     df_mahar_init = pd.read_csv(f'{csv_dir}/data-maharshipandya.csv')

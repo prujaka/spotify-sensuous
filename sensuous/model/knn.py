@@ -15,7 +15,7 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
                          n_neighbors: int = 10,
                          data_dir: str = 'data'):
     """Find `n_neighbors` closest neighbors of a given seed song in an audio
-    feature space of le wagon spotify dataset. Only single artist is supported.
+    feature space of all-songs.csv dataset. Only single artist is supported.
     If the song is not in the dataset, return the song's name.
 
     Parameters
@@ -57,13 +57,20 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
     seed_song = df[criterion]
 
     if seed_song.shape[0] == 0:
-        print("No such a song in the dataset. Returning the user's entry.")
-        return f'{song_title} by {artist}'
+        return {'playlist': [{'artist': 'Rick Astley',
+                              'song': 'Never Gonna Give You Up'}],
+                'code': 0}
     elif seed_song.shape[0] > 1:
-        print("There is more than one entry. Returning the user's entry.")
-        return seed_song
+        songs = seed_song['song_title'].tolist()
+        artists = [
+            strip_artists(artist) for artist in seed_song['artists'].tolist()
+        ]
+        l = [{'artist': artist, 'song': song} for artist, song in zip(artists,
+                                                                      songs)]
+        if len(l) > 10:
+            l = l[0:10]
+        return {'playlist': l, 'code': 1}
 
-    # Feature "preprocessing"
     seed_song_features = seed_song.select_dtypes(exclude='object')
     X = df.select_dtypes(exclude='object')
 
@@ -76,8 +83,9 @@ def predict_playlist_csv(artist: str = 'Frank Sinatra',
     artists = [
         strip_artists(artist) for artist in neighbors_df['artists'].tolist()
     ]
-    l = [{'artist': artist, 'song': song} for artist, song in zip(artists, songs)]
-    playlist = {'playlist': l}
+    l = [{'artist': artist, 'song': song} for artist, song in zip(artists,
+                                                                  songs)]
+    playlist = {'playlist': l, 'code': 2}
     return playlist
 
 

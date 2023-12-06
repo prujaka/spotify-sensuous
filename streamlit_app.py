@@ -1,18 +1,35 @@
 # This script has originally been written by Linda Sadrijaj
 # Modified and adapted by Sergey Tkachenko
-import streamlit as st
+import pandas as pd
 import requests
 import spotipy
+import streamlit as st
+
 from spotipy.oauth2 import SpotifyClientCredentials
-import sensuous.parameters as params
-API_TYPE = 'local'
-API_URL_LOCAL = "http://0.0.0.0:8000"
+
+from sensuous.preprocessing.prepcsv import semicolonize
+
+API_TYPE = 'cloud'
+API_URL_LOCAL = 'http://0.0.0.0:8000'
 
 
-def predict_playlist(artist, song, url):
-    response = requests.get(url + "/predict", params={"artist": artist,
-                                                      "song": song})
-    return response.json()['playlist']
+def api_predict_request(artist, song, url):
+    response = requests.get(f'{url}/predict', params={'artist': artist,
+                                                      'song': song})
+    return response.json()
+
+
+def output_message(request):
+    if request['code'] == 0:
+        return "### Sorry, no match to the user's input in our database." \
+               "\n#### Also, you've been rickrolled:"
+
+    if request['code'] == 1:
+        return "### Several songs found from the user's input. " \
+               "Take a listen and choose one of them as your input."
+
+    if request['code'] == 2:
+        return "### Our ML model suggests the following songs:"
 
 def main():
     # Define your Spotify API credentials
@@ -30,37 +47,53 @@ def main():
     else:
         raise Exception("API type unknown. Should be 'cloud' or 'local'")
 
-    st.set_page_config(page_title="Song Explorer", page_icon=":musical_note:")
+    # Read the csv data and form sample suggestions
+    df = pd.read_csv('data/all-songs.csv')
+    df_suggestions = df[['artists', 'song_title']].sample(10).reset_index()
+    df_suggestions = df_suggestions.drop('index', axis=1)
+    df_suggestions['artists'] = df_suggestions['artists'].map(semicolonize)
+
+    st.set_page_config(page_title='Sensuous Rec. System',
+                       page_icon=':musical_note:')
 
     # App title
     st.title("Sensuous Recommendation System for Spotify")
 
     # Add vinyl record image to header
-    st.image("img/sensuous-pic.jpg")
+    st.image('img/sensuous-pic.jpg')
 
     st.markdown(
-        "Just pop your favorite song into our tool and let us take care "
-        "of the rest!\n"
-        "We'll analyze the song's features and suggest other tracks "
-        "that match its style, making it super easy to discover new music "
-        "that you're bound to love! :hearts:")
+        "Simply input your cherished song into our tool, and we'll handle"
+        " the rest! Our system will analyze the unique features of the track"
+        " and recommend other songs that align with its style, using"
+        " the audio profile. Explore new music effortlessly, discovering"
+        " tunes that are sure to resonate with your preferences!")
 
-    st.markdown("### Enter an artist here :singer:")
-    artist = str(st.text_input('You can write the artist of your favorite song'
-                               'here, but make sure you spell it right :eyes:'))
+    st.markdown(f"Our database currently contains {len(df)} songs."
+                f" Here are some suggestions:")
+    st.table(df_suggestions)
 
-    st.markdown("### Enter a song here :musical_note:")
-    song = str(st.text_input('You can write the title of your favorite song'
-                             'here, but make sure you spell it right :eyes:'))
+    with st.form(key='artist_song_form'):
+        st.markdown("### Enter an artist here")
+        artist = str(st.text_input("Please enter the artist's name exactly as"
+                                   " it is. In the case of multiple artists,"
+                                   " simply input one of them."))
 
-    if song == '' or artist == '':
-        print('Empty artist or song name. Please enter the full search query.')
+        st.markdown("### Enter a song here")
+        song = str(st.text_input("Please enter the song title exactly as"
+                                 " it is."))
+        submit_button = st.form_submit_button(label='Submit')
+
+    if song.strip() == '' or artist.strip() == '':
+        st.write("Empty artist or song name."
+                 " Please enter the search query.")
     else:
-        playlist = predict_playlist(artist, song, url=fastapi_url)
-        st.write(f"We will be happy to make suggestions based "
-                 f"on your choice: {song} by {artist}")
-        st.markdown("### Our ML model suggests the following songs "
-                    ":raised_hands::")
+        request = api_predict_request(artist, song, url=fastapi_url)
+        playlist = request['playlist']
+
+        message = output_message(request)
+        st.markdown(message)
+
         for index, item in enumerate(playlist):
             # Retrieve the song's audio preview URL using the Spotify API
             results = sp.search(q=f"{item['artist']} {item['song']}",
@@ -75,9 +108,8 @@ def main():
             if preview_url:
                 st.audio(preview_url, format='audio/mp3')
             st.write('---')
-        st.write(":musical_note: Enjoy your playlist! :musical_note:",
-                 unsafe_allow_html=True)
+        st.write("Enjoy your playlist!", unsafe_allow_html=True)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

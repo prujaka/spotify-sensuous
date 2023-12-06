@@ -32,3 +32,6 @@ api_test_white_christmas:
 
 run_local_api:
 	@uvicorn sensuous.api.api_fast:api --host 0.0.0.0
+
+streamlit:
+	@streamlit run streamlit_app.py
