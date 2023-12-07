@@ -10,6 +10,9 @@ def index():
     return {"status": "API connected"}
 
 
+def test():
+    return {"test": "test"}
+
 @api.get("/predict")
 def predict(artist: str, song: str):
     """Predicts the playlist based on the user's input"""
