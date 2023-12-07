@@ -1,16 +1,12 @@
 # This script has originally been written by Linda Sadrijaj
 # Modified and adapted by Sergey Tkachenko
+import argparse
 import pandas as pd
 import requests
 import spotipy
 import streamlit as st
-
 from spotipy.oauth2 import SpotifyClientCredentials
-
 from sensuous.preprocessing.prepcsv import semicolonize
-
-API_TYPE = 'cloud'
-API_URL_LOCAL = 'http://0.0.0.0:8000'
 
 
 def api_predict_request(artist, song, url):
@@ -19,33 +15,32 @@ def api_predict_request(artist, song, url):
     return response.json()
 
 
-def output_message(request):
-    if request['code'] == 0:
+def output_message(request_code):
+    if request_code == 0:
         return "### Sorry, no match to the user's input in our database." \
                "\n#### Also, you've been rickrolled:"
 
-    if request['code'] == 1:
+    if request_code == 1:
         return "### Several songs found from the user's input. " \
                "Take a listen and choose one of them as your input."
 
-    if request['code'] == 2:
+    if request_code == 2:
         return "### Our ML model suggests the following songs:"
 
+
 def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--api-url', default=st.secrets['API_URL_CLOUD'])
+    args = parser.parse_args()
+    fastapi_url = vars(args)['api_url']
+
     # Define your Spotify API credentials
     client_id = st.secrets['CLIENT_ID']
     client_secret = st.secrets['CLIENT_SECRET']
     client_credentials_manager = SpotifyClientCredentials(client_id,
                                                           client_secret)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-    # Define the URL of your FastAPI application
-    if API_TYPE == 'local':
-        fastapi_url = API_URL_LOCAL
-    elif API_TYPE == 'cloud':
-        fastapi_url = st.secrets['API_URL_CLOUD']
-    else:
-        raise Exception("API type unknown. Should be 'cloud' or 'local'")
 
     # Read the csv data and form sample suggestions
     df = pd.read_csv('data/all-songs.csv')
@@ -91,7 +86,7 @@ def main():
         request = api_predict_request(artist, song, url=fastapi_url)
         playlist = request['playlist']
 
-        message = output_message(request)
+        message = output_message(request['code'])
         st.markdown(message)
 
         for index, item in enumerate(playlist):
