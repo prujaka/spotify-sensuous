@@ -1,4 +1,4 @@
-# spotify-sensuous
+# Sensuous Recommendation System for Spotify
 
 Welcome to Sensuous Recommendation System for Spotify!
 This is a prototype of a recommendation system which proposes you a song radio
