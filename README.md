@@ -7,6 +7,10 @@ No collaborative filtering or listening history, only the pure sound.
 Powered by a custom API built with FastAPI and a user interface
 crafted with Streamlit.
 
+Deployed app link: https://spotify-sensuous.streamlit.app/
+
+Or, if you want to play with it locally, just follow the instructions:
+
 ## Getting started
 Install the python package of the project by running the following command:
 ```zsh
